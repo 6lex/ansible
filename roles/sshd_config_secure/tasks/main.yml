@@ -1,2 +1,25 @@
 ---
 # tasks file for sshd_config_secure
+
+  - name: Configuration de sshd_config
+    lineinfile: 
+     dest=/etc/ssh/sshd_config 
+     regexp='{{ item.a }}'
+     line='{{ item.b }}' 
+     state=present
+    with_items:
+     - { a: '^PermitEmptyPasswords', b: 'PermitEmptyPasswords no' }
+     - { a: '^X11Forwarding', b: 'X11Forwarding no' }
+     - { a: '^UsePAM', b: 'UsePAM yes' }
+     - { a: '^UseDNS', b: 'UseDNS no' }
+     - { a: '^PasswordAuthentication', b: 'PasswordAuthentication no' }
+#     - { a: '^MaxAuthTries', b: 'MaxAuthTries 3' }
+#     - { a: '^LoginGraceTime', b: 'LoginGraceTime 30' }
+     - { a: '^PermitRootLogin', b: 'PermitRootLogin without-password' }
+     - { a: '^PrintLastLog', b: 'PrintLastLog yes' }
+     - { a: '^PermitUserEnvironment', b: 'PermitUserEnvironment no' }
+     - { a: '^AllowTcpForwarding', b: 'AllowTcpForwarding no' }
+
+    notify: 
+     - Restart sshd
+
